@@ -53,20 +53,23 @@ The primitive data types include:
 
 //TODO: declare a new variable named `x`
 //and initialize it to a literal string
-
+let x = "Hello, JS!"
 
 //the `console` object represents the developer
 //tools console, or the terminal if you run this
 //under Node.js. The `.log()` method writes the 
 //value of an expression to the console.
 //TODO: write `x` to the console
-
+console.log("Value of X is: %s (formatted output)", x);
 
 //if you don't initialize a new variable
 //it's value is `undefined`
 let uninitializedVariable;
 console.log("uninitializedVariable is:", uninitializedVariable);
 
+if(uninitializedVariable == undefined) {
+    console.log("variable is undefined");
+}
 
 //variables declared with `let` have block scope
 //similar to other languages like Java
@@ -79,7 +82,7 @@ if (temp > 0) {
 }
 //what do you think the value of `temp` is after the if block?
 //use console.log() to find out!
-
+console.log("The value of temp is %s", temp);
 
 let temp2 = 5;
 if (temp2 > 0) {
@@ -88,7 +91,7 @@ if (temp2 > 0) {
 }
 //what do you think the value of `temp2` is after the if block?
 //use console.log() to find out!
-
+console.log("The value of temp2 is", temp2);
 
 //moral of the story: use `let` instead of `var`
 
@@ -104,31 +107,45 @@ To create a zero-length array, just use `[]`.
 */
 //TODO: declare a variable named `emptyArray`
 //and set it equal to an empty array
+let emptyArray = [];
+emptyArray.push("testing");
+emptyArray.push(25);
+console.log("emptyArray is: ", emptyArray)
 
 //TODO: declare a variable named `nums`
 //and set it equal to an array of numbers
 //containing 10,11,12,13,14
 
+let nums = [10, 11, 12, 13, 14];
+console.log("nums is: ", nums);
+
 
 //the `.length` property returns 
 //the number of elements in the array
 //TODO: write the length of `nums` to the console
-
+console.log("the length of nums is %d", nums.length);
 
 //you can add elements to the end of an array 
 //using the build-in .push() method
 //TODO: add the number 15 to the end of the `nums` array
-
+nums.push(15);
+console.log("nums is now:", nums);
 
 //TODO: create a new variable named `courses`
 //that is initialized to an array of strings,
 //one for each course name you are currently 
 //taking (e.g., "INFO 343"), 
 //and write that to the console
+let courses = ["INFO 343", "INFO 312", "JAPAN 211", "CSE 495"];
+console.log("my course this quarter is:", courses);
 
 
 //TODO: write the last element in the array to the console
+console.log("the last course in list is", courses[courses.length-1]);
 
+// let sparseArray = [];
+// sparseArray[10] = "foo";
+// console.log(sparseArray);
 
 /* FOR LOOPS
 For loops work exactly like they do in Java,
@@ -147,7 +164,13 @@ between 0 and 49. Write the populated
 array to the console to make sure you
 did it right.
 */
-
+let evens =[];
+console.group("even nums between 0 and 49")
+for (let i = 0; i <= 49; i+=2) {
+    evens.push(i);
+    // console.log("")
+}
+console.log("even is", evens);
 
 /* OBJECTS
 
@@ -168,7 +191,9 @@ use `{}`.
 
 //TODO: declare a new variable named `emptyObject`
 //and set it equal to an empty object
-
+let emptyObject = {};
+emptyObject.newKey = 10;
+console.log("emptyObj is", emptyObject);
 
 //TODO: declare a new variable named `player`
 //and set it to an object with the following properties:
@@ -178,10 +203,17 @@ use `{}`.
 // level = 0
 
 
+let player = {
+    firstName: "Mary",
+    lastName: "Rodriguez",
+    totalPoints: 4,
+    level: 0
+};
+
 //you can get the value for a key using
 //the familiar `.` syntax
 //TODO: write the firstName and lastName properties to the console
-
+console.log("first and last name is", player.firstName, player.lastName, "123424tyrhjhgrfedas");
 
 //you can also get the value for a key
 //using an array-like syntax, which can
@@ -189,7 +221,8 @@ use `{}`.
 //TODO: get the lastName property using the 
 //array-like syntax, using a variable set to "lastName"
 //as the expression
-
+let key = "firstName";
+console.log(player[key]);
 
 //these key/value pairs are often called "properties"
 //because the syntax looks a lot like property 
@@ -197,17 +230,24 @@ use `{}`.
 //or removed at any time.
 //TODO: add a new `email` property set to "mary@example.com"
 //and write that to the console
+player.email = "mary@example.com";
+console.log(player);
+
+
 
 //accessing a key that doesn't exist yet
 //returns `undefined` (no error)
 //TODO: write the value of the `phone` property to the console
 //(doesn't exist, so it should just write "undefined", with no error)
-
+console.log(player.phone);
 
 //you can iterate over all keys/values using
 //the for...in syntax
 console.group("keys/values from player using for...in");
 //TODO: iterate over all keys/values using for...in
+for (let key in player) {
+    console.log(key, player[key]);
+}
 console.groupEnd();
 
 //or you can get the keys as an array using Object.keys()
@@ -215,6 +255,11 @@ console.groupEnd();
 console.group("keys/values from player using Object.keys()");
 //TODO: use Object.keys(player) to get an array with all the
 //keys, and then iterate that using a standard for loop
+let keys = Object.keys(player);
+for (let i = 0; i < keys.length; i++) {
+    let key = keys[i];
+    console.log(key, player[key]);
+}
 console.groupEnd();
 
 //TODO: reset your `courses` variable defined
