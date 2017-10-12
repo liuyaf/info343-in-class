@@ -271,11 +271,21 @@ console.groupEnd();
 //          or omit if there is no section letter
 // - teachers: an array containing the names of your teacher and TA(s)
 //          for that course
-
+let courses2 = [
+    {
+       name: "INFO343",
+       section: "D",
+       teachers: ["Stearns", "Basa"]
+    },
+    {
+        name: "INFO312",
+        teachers: ["Searle", "Daneil"]
+    }
+];
 
 //TODO: write the first teacher name from the 
 //last course in the `courses` array to the console
-
+console.log(courses2[courses2.length-1].teachers[0]);
 
 
 /* FUNCTIONS
@@ -299,16 +309,15 @@ a value returns `undefined` implicitly.
  * @returns {string}
  */
 function getGreeting(thePlayer) {
-    return "Hello " + thePlayer.firstName + "!";
+    return "Hello " + thePlayer.firstName + " " + thePlayer.lastName + "!";
 }
 //TODO: call getGreeting() passing your `player` variable
 //and write the return value to the console
-
-
+getGreeting(player)
+console.log(getGreeting(player))
 //TODO: change the getGreeting() function above
 //to include the player's last name as well as first name,
 //call it again, and write the return value to the console
-
 
 /**
  * Increments the `level` property of
@@ -326,6 +335,10 @@ function getGreeting(thePlayer) {
  */
 function levelUp(thePlayer) {
     //TODO: implement this function
+    thePlayer.level += 1;
+    let percent = thePlayer.level / 10;
+    thePlayer.totalPoints = Math.ceil(thePlayer.totalPoints + thePlayer.totalPoints * percent);
+    return thePlayer;
 }
 
 //create a new player
@@ -353,7 +366,11 @@ console.log("points after leveling-up: %d", levelUp(player2).totalPoints);
  */
 function randomIntegers(amount, max) {
     //TODO: implement this function according to the comments above
-
+    let x = [];
+    for (let i = 0; i < amount; i++) {
+        x.push(Math.round(Math.random() * max));
+    }
+    return x
 }
 
 let randomNums = randomIntegers(10, 100);
@@ -366,7 +383,15 @@ console.log("random integers:", randomNums);
  */
 function max(arrayOfNumbers) {
     //TODO: implement this function according to the comments above
-
+    let x = arrayOfNumbers[0];
+    let max = x;
+    for (let i = 1; i < arrayOfNumbers.length; i++) {
+        // if (arrayOfNumbers[i] > x) {
+        //     max = arrayOfNumbers[i];
+        // }
+        max = arrayOfNumbers[i] > max ? arrayOfNumbers[i] : max;
+    }
+    return max;
 }
 
 console.log("the maximum value in %o is %d", randomNums, max(randomNums));
