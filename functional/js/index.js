@@ -57,9 +57,46 @@ returned a truthy value
 //use to filter the BABYNAMES array based on the
 //value in the `sex` property of each object in
 //the array
+// function isMale(record) {
+//     return record.sex === 'M';
+// }
+
+// function isFemale(record) {
+//     return record.sex === 'F';
+// }
+
+function isSex(sex) {
+    let lowerSex = sex.toLowerCase();
+    return function(record) {
+        let lowerRecordSex = record.sex.toLowerCase();
+        return lowerRecordSex === lowerSex;
+    }
+}
+
+let isMale = isSex('M');
+let isFemale = isSex('F');
+
+let males = BABYNAMES.filter(isMale);
+console.log('there are %s male records', numeral(males.length).format('0,0'));
+
+let females = BABYNAMES.filter(isFemale);
+console.log('there are %s female records', numeral(females.length).format('0,0'));
 
 
+// function isMyName(record) {
+//     return record.name.toLowerCase() === 'Liuyang';
+// }
 
+function myName(name) {
+    let lowerName = name.toLowerCase();
+    return function(record) {
+        let lowerRecordName = record.name.toLowerCase();
+        return lowerRecordName === lowerName;
+    }
+}
+
+let isMyName = myName('liam');
+console.log(BABYNAMES.filter(isMyName));
 
 
 /* SORTING
@@ -76,13 +113,31 @@ the second.
 //TODO: create comparator functions we can use
 //to sort the BABYNAMES array based on count
 //and name
+function byCount(record, record2) {
+    return record.count - record2.count;
+}
+
+function byName(record, record2) {
+    return record.name.localeCompare(record2.name);
+}
 
 
+let sortedFemales = females.sort(byCount);
+let sortedMales = males.sort(byCount);
+console.log("least popular female name:", sortedFemales[0]);
+console.log("least popular male name:", sortedMales[0]);
 
 //TODO: create a descending() function that
 //wraps a comparator function to perform a
 //descending sort instead of an ascending sort
+function descending(comparator) {
+    return function(record, record2) {
+        return -(comparator(record,record2));
+    }
+}
 
+let popularFemales = females.sort(descending(byCount));
+console.log('most popular female name:', popularFemales[0]);
 
 
 /* SLICING 
@@ -94,6 +149,8 @@ up to but not include.
 
 //TODO: use .slice() to get the top 10 female baby 
 //name records
+let top3FemaleNames = popularFemales.slice(0,3);
+console.log(top3FemaleNames);
 
 
 /* MAPPING
@@ -109,11 +166,21 @@ the output array.
 //TODO: use .map() to transform the top 10 female
 //baby name records array into an array of strings
 //containing just the names themselves
-
-
+function pluckName(record) {
+    return record.name;
+}
+let top3FemaleJustNames = top3FemaleNames.map(pluckName);
+console.log(top3FemaleJustNames);
 //TODO: use .map() to transform those top 10
 //names into all lower case
+function toLower(str) {
+    return str.toLowerCase();
+}
+console.log(top3FemaleJustNames.map(toLower));
 
+let results = BABYNAMES.filter(isFemale).sort(descending(byCount)).slice(0,10).map(pluckName).join(',');
+
+console.log(results);
 
 
 /* REDUCING
@@ -150,18 +217,23 @@ function randomIntegers(amount, max) {
  */
 function sum(accumulator, num) {
     //TODO: implement this function
+    return accumulator + num;
 }
 
 //TODO: use randomIntegers() to generate an array of 
 //random integers and use .reduce() with sum*() to
 //calculate the sum of those integers.
-
+let ramdomNums = randomIntegers(100,500);
+console.log(ramdomNums.reduce(sum, 0));
 
 //TODO: now define a max() reducer that reduces
 //an array of numbers to their maximum value.
 //Then use that with .reduce() to find the 
 //maximum value in an array of random integers.
-
+function max(accumulator, num) {
+    return num > accumulator ? num : accumulator;
+}
+console.log(ramdomNums.reduce(max,ramdomNums[0]));
 
 
 //TODO: given that a JavaScript object is really
@@ -181,6 +253,7 @@ function sum(accumulator, num) {
 //an associate value of 0. Then increment the value
 //and return the accumulator.
 
+
 /**
  * Reducer for counting how many times a name
  * appears in the array of baby name records
@@ -188,18 +261,33 @@ function sum(accumulator, num) {
  * @param {BabyNameRecord} record 
  * @returns {Object}
  */
-function countNames(nameMap, record) {
-    //TODO: implement this function
+function countNames(nameMap, babyName) {
+    if (!nameMap.hasOwnProperty(babyName.name)) {
+        nameMap[babyName.name] = 0;
+    }
+    nameMap[babyName.name]++;
+    return nameMap;
 }
+
+
+
 
 //TODO: use the countNames reducer to generate
 //an object containing all the distinct names 
 //as keys, with values representing the number of
 //times that name appeared in the array.
+let nameCounts = BABYNAMES.reduce(countNames, {});
+console.log(nameCounts);
 
 //TODO: use Object.keys() to get all of the distinct
 //names as an array of strings
-
+let keys = Object.keys(nameCounts);
+let array = [];
+for (let i = 0;i < nameCounts.length;i++) {
+    let key = keys[i];
+    array.push(key);
+}
+console.log(keys);
 
 //TODO: filter that array of keys so that you end
 //up with only the names that appeared twice,
