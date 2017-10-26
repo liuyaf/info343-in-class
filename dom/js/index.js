@@ -50,17 +50,73 @@ let state = {
 //TODO: implement functions to render the current state
 //to the page as new <tr> and <td> elements within the
 //<tbody> element that is already in the page.
+/**
+ * Creates and returns a new DOM element
+ * @param {string} name 
+ * @param {*} value 
+ * @param {string} className 
+ */
+function createElem(name, value, className) {
+    let elem = document.createElement(name);
+    elem.textContent = value;
+    if (className) {
+        elem.className = className;
+    }
+    return elem;
+}
 
+function renederTableRow(record) {
+    let tr = document.createElement("tr");
+    tr.appendChild(createElem("td", record.name, ""));
+    tr.appendChild(createElem("td", record.sex, ""));
+    tr.appendChild(createElem("td", record.count, "text-right"));
+    return tr;
+}
+
+function render(state) {
+    let tbody = document.querySelector("tbody");
+    tbody.textContent = "";
+    let totalPages = Math.ceil(state.records.length / PAGE_SIZE);
+    let startingIndex = state.currentPage * PAGE_SIZE;
+    let pageRecords = state.records.slice(startingIndex, startingIndex + PAGE_SIZE);
+    for (let i = 0; i < pageRecords.length; i++) {
+        tbody.appendChild(renederTableRow(pageRecords[i]));
+    }
+
+    CURRENT_PAGE.textContent = state.currentPage + 1;
+    TOTAL_PAGES.textContent = totalPages.toString();
+    PREV_PAGE_BUTTON.disabled = state.currentPage === 0;
+    NEXT_PAGE_BUTTON.disabled = state.currentPage === totalPages - 1;
+}
+
+render(state);
 
 
 
 //TODO: listen for the "click" event raised by the 
 //prev/next page buttons, mutate the state.currentPage,
 //and re-render
+NEXT_PAGE_BUTTON.addEventListener("click", function() {
+    // console.log("next page button pressed");
+    state.currentPage++;
+    render(state);
+});
 
+PREV_PAGE_BUTTON.addEventListener("click", function() {
+    // console.log("prev page button pressed")
+    state.currentPage--;
+    render(state);
+})
 
 //TODO: listen for the "input" event raised by the
 //name filter <input> element, filter the state.records,
 //and re-render
 
-
+NAME_FILTER_INPUT.addEventListener('input', function() {
+    let q = NAME_FILTER_INPUT.value.trim().toLocaleLowerCase();
+    state.records = BABYNAMES.filter(function(record) {
+        return record.name.toLowerCase().startsWith(q);
+    });
+    state.currentPage = 0;
+    render(state);
+})
